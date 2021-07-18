@@ -11,7 +11,7 @@ namespace Abernathy.Demographics.Service.Data
 
         public DbSet<Patient> Patient { get; set; }
         public DbSet<Address> Address { get; set; }
-        public DbSet<Gender> Sex { get; set; }
+        public DbSet<Gender> Genders { get; set; }
         public DbSet<PhoneNumber> PhoneNumber { get; set; }
         public DbSet<PatientAddress> PatientAddress { get; set; }
         public DbSet<PatientPhoneNumber> PatientPhoneNumbers { get; set; }
