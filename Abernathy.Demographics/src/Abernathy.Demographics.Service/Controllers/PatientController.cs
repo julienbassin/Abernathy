@@ -7,7 +7,7 @@ namespace Abernathy.Demographics.Service.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
-        // mapper and IPatientService
+        //IPatientService
         public PatientController()
         {
 
