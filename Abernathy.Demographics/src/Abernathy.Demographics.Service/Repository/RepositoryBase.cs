@@ -28,7 +28,7 @@ namespace Abernathy.Demographics.Service.Repository
             return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
+        public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
         {
             if (expression == null)
             {
@@ -36,19 +36,6 @@ namespace Abernathy.Demographics.Service.Repository
             }
 
             return _dbContext.Set<TEntity>().Where(expression);
-        }
-
-        public virtual async Task<List<TEntity>> GetAllAsync(
-            Expression<Func<TEntity, bool>> filter)
-        {
-            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            return await query.ToListAsync();
         }
 
         public virtual async Task<TEntity> AddAsync(TEntity entity)

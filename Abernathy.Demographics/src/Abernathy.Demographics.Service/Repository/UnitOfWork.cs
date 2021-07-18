@@ -21,7 +21,7 @@ namespace Abernathy.Demographics.Service.Repository
         public IAddressRepository AddressRepository =>
             _addressRepository ??= new AddressRepository(_context);
 
-        public IPhoneNumberRepository phoneNumberRepository =>
+        public IPhoneNumberRepository PhoneNumberRepository =>
             _phoneNumberRepository ??= new PhoneNumberRepository(_context);
 
         public async Task CommitAsync()

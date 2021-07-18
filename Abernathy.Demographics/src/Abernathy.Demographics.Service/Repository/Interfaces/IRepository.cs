@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace Abernathy.Demographics.Service.Repository.Interfaces
         Task<TEntity> AddAsync(TEntity entity);
         Task DeleteAsync(object id);
         Task<List<TEntity>> GetAllAsync();
-        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter);
+        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> expression);
         Task<TEntity> GetByIdAsync(object id);
         Task UpdateAsync(TEntity entity);
     }
