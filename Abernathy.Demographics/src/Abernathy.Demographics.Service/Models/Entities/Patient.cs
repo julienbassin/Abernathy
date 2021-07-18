@@ -10,8 +10,8 @@ namespace Abernathy.Demographics.Service.Models.Entities
         public int Age { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Type { get; set; }
-        public ICollection<PatientPhoneNumber> PatientNumber { get; set; }
-        public ICollection<PatientAddress> PatientAddress { get; set; }
+        public List<PatientPhoneNumber> PatientPhoneNumbers { get; set; } = new List<PatientPhoneNumber>();
+        public List<PatientAddress> PatientAddresses { get; set; } = new List<PatientAddress>();
 
 
 
