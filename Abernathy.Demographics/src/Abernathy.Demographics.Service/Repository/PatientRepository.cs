@@ -5,6 +5,8 @@ using Abernathy.Demographics.Service.Models.Entities;
 using Abernathy.Demographics.Service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Abernathy.Demographics.Service.Models.DTOs;
+
 namespace Abernathy.Demographics.Service.Repository
 {
     public class PatientRepository : Repository<Patient>, IPatientRepository

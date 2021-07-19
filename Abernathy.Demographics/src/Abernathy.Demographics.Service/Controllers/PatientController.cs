@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Abernathy.Demographics.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Abernathy.Demographics.Service.Controllers
@@ -7,17 +8,17 @@ namespace Abernathy.Demographics.Service.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
-        //IPatientService
-        public PatientController()
+        IPatientService _patientService;
+        public PatientController(IPatientService patientService)
         {
-
+            _patientService = patientService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-
-            return Ok();
+            var result = _patientService.GetAll();
+            return Ok(result);
         }
     }
 }
