@@ -20,8 +20,8 @@ namespace Abernathy.Demographics.Service.Services
 
         public Task<IEnumerable<PatientDto>> GetAll()
         {
-            // _unitOfWork.PatientRepository.
-            return null;
+            var patients = _unitOfWork.PatientRepository.FindAll();
+            return patients;
         }
     }
 }
