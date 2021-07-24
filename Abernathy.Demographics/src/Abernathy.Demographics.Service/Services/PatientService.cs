@@ -18,10 +18,32 @@ namespace Abernathy.Demographics.Service.Services
             _mapper = mapper;
         }
 
-        public Task<IEnumerable<PatientDto>> GetAll()
+        public async Task<IEnumerable<PatientDto>> GetAll()
         {
-            var patients = _unitOfWork.PatientRepository.FindAll();
-            return patients;
+            var entities = await _unitOfWork.PatientRepository.FindAll();
+
+            var result = _mapper.Map<IEnumerable<PatientDto>>(entities);
+
+            return result;
+        }
+
+        public async Task<PatientDto> GetPatientById(int Id)
+        {
+            if (Id < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var entity = _unitOfWork.PatientRepository.GetByIdAsync(Id);
+
+            if (entity == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var result = _mapper.Map<PatientDto>(entity);
+
+            return patient;
         }
     }
 }
