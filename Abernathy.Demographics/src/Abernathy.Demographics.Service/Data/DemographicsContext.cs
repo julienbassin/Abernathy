@@ -21,11 +21,19 @@ namespace Abernathy.Demographics.Service.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-            {
-            }
-
+                optionsBuilder.UseInMemoryDatabase("Server=(localdb)\\mssqllocaldb;Database=AbernatyPatientDB;Trusted_Connection=True;MultipleActiveResultSets=true");
             base.OnConfiguring(optionsBuilder);
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=AbernatyPatientDB;Trusted_Connection=True;MultipleActiveResultSets=true");
+        //    }
+
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

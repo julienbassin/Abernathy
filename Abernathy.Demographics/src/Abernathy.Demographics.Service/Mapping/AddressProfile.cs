@@ -4,8 +4,6 @@ namespace Abernathy.Demographics.Service.Mapping
 {
     public class AddressProfile : Profile
     {
-
-
         public string StreetName { get; set; }
         public int HouseNumber { get; set; }
         public string ZipCode { get; set; }
