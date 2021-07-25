@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Abernathy.Demographics.Service.Models.Entities;
 
 namespace Abernathy.Demographics.Service.Repository.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity> where TEntity : class, IEntityBase
     {
         Task<TEntity> AddAsync(TEntity entity);
         Task DeleteAsync(object id);

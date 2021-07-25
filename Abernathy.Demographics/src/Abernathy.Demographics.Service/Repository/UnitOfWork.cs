@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Abernathy.Demographics.Service.Data;
+using Abernathy.Demographics.Service.Models.Entities;
 using Abernathy.Demographics.Service.Repository.Interfaces;
 
 namespace Abernathy.Demographics.Service.Repository
@@ -7,22 +8,22 @@ namespace Abernathy.Demographics.Service.Repository
     public class UnitOfWork : IUnitOfWork
     {
         public readonly DemographicsContext _context;
-        public IPatientRepository _patientRepository;
-        public IAddressRepository _addressRepository;
-        public IPhoneNumberRepository _phoneNumberRepository;
+        public IRepository<Patient> _patientRepository;
+        public IRepository<Address> _addressRepository;
+        public IRepository<PhoneNumber> _phoneNumberRepository;
         public UnitOfWork(DemographicsContext context)
         {
             _context = context;
         }
 
-        public IPatientRepository PatientRepository =>
-            _patientRepository ??= new PatientRepository(_context);
+        public IRepository<Patient> PatientRepository =>
+            _patientRepository ??= new Repository<Patient>(_context);
 
-        public IAddressRepository AddressRepository =>
-            _addressRepository ??= new AddressRepository(_context);
+        public IRepository<Address> AddressRepository =>
+            _addressRepository ??= new Repository<Address>(_context);
 
-        public IPhoneNumberRepository PhoneNumberRepository =>
-            _phoneNumberRepository ??= new PhoneNumberRepository(_context);
+        public IRepository<PhoneNumber> PhoneNumberRepository =>
+            _phoneNumberRepository ??= new Repository<PhoneNumber>(_context);
 
         public async Task CommitAsync()
         {

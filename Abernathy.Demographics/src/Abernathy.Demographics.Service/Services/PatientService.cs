@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abernathy.Demographics.Service.Models.DTOs;
@@ -8,7 +9,7 @@ namespace Abernathy.Demographics.Service.Services
 {
     public class PatientService : IPatientService
     {
-        public IUnitOfWork _unitOfWork;
+        public readonly IUnitOfWork _unitOfWork;
         public IMapper _mapper;
 
         public PatientService(IUnitOfWork unitOfWork,
@@ -20,7 +21,7 @@ namespace Abernathy.Demographics.Service.Services
 
         public async Task<IEnumerable<PatientDto>> GetAll()
         {
-            var entities = await _unitOfWork.PatientRepository.FindAll();
+            var entities = await _unitOfWork.PatientRepository.GetAllAsync();
 
             var result = _mapper.Map<IEnumerable<PatientDto>>(entities);
 
@@ -43,7 +44,7 @@ namespace Abernathy.Demographics.Service.Services
 
             var result = _mapper.Map<PatientDto>(entity);
 
-            return patient;
+            return result;
         }
     }
 }

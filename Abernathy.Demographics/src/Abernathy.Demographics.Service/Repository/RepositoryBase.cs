@@ -4,12 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Abernathy.Demographics.Service.Data;
+using Abernathy.Demographics.Service.Models.Entities;
 using Abernathy.Demographics.Service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Abernathy.Demographics.Service.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntityBase
     {
         protected readonly DemographicsContext _dbContext;
 

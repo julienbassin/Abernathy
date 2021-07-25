@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
+using Abernathy.Demographics.Service.Models.Entities;
 
 namespace Abernathy.Demographics.Service.Repository.Interfaces
 {
     public interface IUnitOfWork
     {
-        IPatientRepository PatientRepository { get; }
-        IAddressRepository AddressRepository { get; }
-        IPhoneNumberRepository PhoneNumberRepository { get; }
+        IRepository<Patient> PatientRepository { get; }
+        IRepository<Address> AddressRepository { get; }
+        IRepository<PhoneNumber> PhoneNumberRepository { get; }
         Task CommitAsync();
         Task RollBackAsync();
     }

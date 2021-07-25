@@ -1,6 +1,6 @@
 namespace Abernathy.Demographics.Service.Models.Entities
 {
-    public class EntityBase
+    public interface IEntityBase
     {
         public int Id { get; set; }
     }

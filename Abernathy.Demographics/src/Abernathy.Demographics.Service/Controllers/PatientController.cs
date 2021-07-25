@@ -1,5 +1,8 @@
+using System;
 using System.Threading.Tasks;
+using Abernathy.Demographics.Service.Models.DTOs;
 using Abernathy.Demographics.Service.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Abernathy.Demographics.Service.Controllers
@@ -14,11 +17,73 @@ namespace Abernathy.Demographics.Service.Controllers
             _patientService = patientService;
         }
 
+        /// <summary>
+        /// Action to see all patients.
+        /// </summary>
+        /// <returns>Returns a list of all patients</returns>
+        /// <response code="200">Returned all the patients present</response>
+        /// <response code="400">Returned if the patients couldn't be loaded from Database</response>
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var result = _patientService.GetAll();
             return Ok(result);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(int Id)
+        {
+            if (Id < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var result = _patientService.FindById(Id);
+
+            // return an anonyme object with ID
+            return Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost]
+        public async Task<IActionResult> Add(PatientDto patientDTO)
+        {
+            if (patientDTO == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var result = _patientService.GetAll();
+
+            // return an anonyme object with ID
+            return Ok(result);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut]
+        public async Task<IActionResult> Update(int Id, PatientDto patientDTO)
+        {
+            if (patientDTO == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (Id < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var result = _patientService.GetAll();
+            return NoContent();
         }
     }
 }
