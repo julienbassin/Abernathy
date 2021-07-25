@@ -117,7 +117,6 @@ namespace Abernathy.Demographics.Service.Data
             modelBuilder.Entity<Gender>(entity =>
             {
                 entity.Property(e => e.gender)
-                    .IsRequired()
                     .HasMaxLength(10);
             });
 

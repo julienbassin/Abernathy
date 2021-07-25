@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abernathy.Demographics.Service.Data;
+using Abernathy.Demographics.Service.Repository;
+using Abernathy.Demographics.Service.Repository.Interfaces;
+using Abernathy.Demographics.Service.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,9 +31,34 @@ namespace Abernathy.Demographics.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DemographicsContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            bool.TryParse(Configuration["BaseServiceSettings:UseInMemoryDatabase"], out var useInMemory);
+
+            if (!useInMemory)
+            {
+                services.AddDbContext<DemographicsContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                });
+            }
+            else
+            {
+                services.AddDbContext<DemographicsContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            }
+
+
+            // Database Layer
+            services.AddTransient<DemographicsContext>();
+
+            // Repository Layer
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            // Service Layer
+            services.AddTransient<IPatientService, PatientService>();
+
+            // AutoMapper
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
