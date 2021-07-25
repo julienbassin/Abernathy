@@ -19,14 +19,14 @@ namespace Abernathy.Demographics.Service.Repository
             _dbContext = dbContext;
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(object id)
+        public TEntity GetById(object id)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
+            return _dbContext.Set<TEntity>().Find(id);
         }
 
-        public virtual async Task<List<TEntity>> GetAllAsync()
+        public List<TEntity> GetAll()
         {
-            return await _dbContext.Set<TEntity>().ToListAsync();
+            return _dbContext.Set<TEntity>().ToList();
         }
 
         public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> expression)
@@ -39,40 +39,37 @@ namespace Abernathy.Demographics.Service.Repository
             return _dbContext.Set<TEntity>().Where(expression);
         }
 
-        public virtual async Task<TEntity> AddAsync(TEntity entity)
+        public void Add(TEntity entity)
         {
             try
             {
                 _dbContext.Set<TEntity>().Add(entity);
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
                 _dbContext.Entry(entity).State = EntityState.Detached;
                 throw;
             }
-
-            return entity;
         }
 
-        public virtual async Task UpdateAsync(TEntity entity)
+        public void Update(TEntity entity)
         {
             if (entity != null)
             {
                 _dbContext.Set<TEntity>().Update(entity);
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
             }
         }
 
-        public virtual async Task DeleteAsync(object id)
+        public void Delete(TEntity entity)
         {
-            TEntity entity = await _dbContext.Set<TEntity>().FindAsync(id);
-
-            if (entity != null)
+            if (entity == null)
             {
-                _dbContext.Set<TEntity>().Remove(entity);
-                await _dbContext.SaveChangesAsync();
+                throw new ArgumentNullException();
             }
+
+            _dbContext.Set<TEntity>().Remove(entity);
         }
     }
 }

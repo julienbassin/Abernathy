@@ -9,11 +9,11 @@ namespace Abernathy.Demographics.Service.Repository.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class, IEntityBase
     {
-        Task<TEntity> AddAsync(TEntity entity);
-        Task DeleteAsync(object id);
-        Task<List<TEntity>> GetAllAsync();
+        void Add(TEntity entity);
+        void Delete(TEntity entity);
+        List<TEntity> GetAll();
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> expression);
-        Task<TEntity> GetByIdAsync(object id);
-        Task UpdateAsync(TEntity entity);
+        TEntity GetById(object id);
+        void Update(TEntity entity);
     }
 }

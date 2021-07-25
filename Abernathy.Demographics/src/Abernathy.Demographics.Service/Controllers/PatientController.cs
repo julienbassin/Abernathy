@@ -37,33 +37,31 @@ namespace Abernathy.Demographics.Service.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{Id}")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> GetById(int Id)
         {
-            if (Id < 0)
+            if (Id <= 0)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            var result = _patientService.FindById(Id);
-
-            // return an anonyme object with ID
+            var result = _patientService.GetPatientById(Id);
             return Ok(result);
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> Add(PatientDto patientDTO)
+        public async Task<IActionResult> Add(CreatedPatientDto patientDTO)
         {
             if (patientDTO == null)
             {
                 throw new ArgumentNullException();
             }
 
-            var result = _patientService.GetAll();
+            var result = _patientService.Create(patientDTO);
 
             // return an anonyme object with ID
-            return Ok(result);
+            return CreatedAtAction(nameof(GetById), new { result.Id }, result); ;
         }
 
 
@@ -77,12 +75,26 @@ namespace Abernathy.Demographics.Service.Controllers
                 throw new ArgumentNullException();
             }
 
-            if (Id < 0)
+            if (Id <= 0)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
             var result = _patientService.GetAll();
+            return NoContent();
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            if (Id <= 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            _patientService.DeletePatientById(Id);
             return NoContent();
         }
     }
