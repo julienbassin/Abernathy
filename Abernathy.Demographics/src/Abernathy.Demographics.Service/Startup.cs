@@ -31,19 +31,10 @@ namespace Abernathy.Demographics.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            bool.TryParse(Configuration["BaseServiceSettings:UseInMemoryDatabase"], out var useInMemory);
-
-            if (!useInMemory)
+            services.AddDbContext<DemographicsContext>(options =>
             {
-                services.AddDbContext<DemographicsContext>(options =>
-                {
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                });
-            }
-            else
-            {
-                services.AddDbContext<DemographicsContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
-            }
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
 
             // Database Layer
