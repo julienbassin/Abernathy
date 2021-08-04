@@ -11,7 +11,7 @@ namespace Abernathy.Demographics.Service.Data
 
         public DbSet<Patient> Patient { get; set; }
         public DbSet<Address> Address { get; set; }
-        public DbSet<Gender> Genders { get; set; }
+        public DbSet<Gender> Gender { get; set; }
         public DbSet<PhoneNumber> PhoneNumber { get; set; }
         public DbSet<PatientAddress> PatientAddress { get; set; }
         public DbSet<PatientPhoneNumber> PatientPhoneNumbers { get; set; }
@@ -111,7 +111,7 @@ namespace Abernathy.Demographics.Service.Data
 
             modelBuilder.Entity<Gender>(entity =>
             {
-                entity.Property(e => e.gender)
+                entity.Property(e => e.Type)
                     .HasMaxLength(10);
             });
 
