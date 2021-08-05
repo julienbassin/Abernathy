@@ -199,42 +199,33 @@ namespace Abernathy.Demographics.Service.Services
             }
         }
 
-        public void Update(int Id, UpdatePatientDto model)
+        public async Task Update(UpdatePatientDto model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException();
             }
 
-            if (Id <= 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            // handle address
-            await _updateAddresses();
-
-            // handle phonenumber
-            await _updatePhoneNumbers();
+            //if (Id <= 0)
+            //{
+            //    throw new ArgumentOutOfRangeException();
+            //}
 
             // then map all theses properties to newPatient
 
-            var existingPatient = _unitOfWork.PatientRepository.GetById(Id);
+            //var existingPatient = _unitOfWork.PatientRepository.GetById(Id);
 
             var currentPatient = _mapper.Map<Patient>(model);
 
-            // delete this
-            existingPatient.FirstName = currentPatient.FirstName;
-            existingPatient.LastName = currentPatient.LastName;
-            existingPatient.Age = currentPatient.Age;
-            existingPatient.DateOfBirth = currentPatient.DateOfBirth;
-            existingPatient.Type = currentPatient.Type;
-            existingPatient.PatientAddresses = currentPatient.PatientAddresses;
-            existingPatient.PatientPhoneNumbers = currentPatient.PatientPhoneNumbers;
+            // handle address
+            await _updateAddresses(model.PatientAddresses, currentPatient);
+
+            // handle phonenumber
+            await _updatePhoneNumbers(model.PatientPhoneNumbers, currentPatient);
 
             try
             {
-                _unitOfWork.PatientRepository.Update(existingPatient);
+                _unitOfWork.PatientRepository.Update(currentPatient);
                 _unitOfWork.CommitAsync();
             }
             catch (Exception)
@@ -247,12 +238,28 @@ namespace Abernathy.Demographics.Service.Services
 
         }
 
-        private Task _updatePhoneNumbers(IEnumerable<PhoneNumberDto> addresses, Patient entity)
+        private async Task _updatePhoneNumbers(IEnumerable<PhoneNumberDto> phoneNumbers, 
+                                                Patient entity)
         {
-            throw new NotImplementedException();
+            if (phoneNumbers == null || entity == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var modelArray = phoneNumbers as PhoneNumberDto[] ?? phoneNumbers.ToArray();
+            // match the right number and/or both of them
+
+            if (modelArray.Any())
+            {
+                foreach (var currentModel in modelArray)
+                {
+                    await _insertPhoneNumbers(currentModel, entity);
+                }
+            }
         }
 
-        private Task _updateAddresses(IEnumerable<AddressDto> addresses, Patient entity)
+        private Task _updateAddresses(IEnumerable<AddressDto> addresses, 
+                                        Patient entity)
         {
             throw new NotImplementedException();
         }

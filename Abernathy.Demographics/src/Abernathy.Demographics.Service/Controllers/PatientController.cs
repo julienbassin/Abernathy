@@ -68,7 +68,7 @@ namespace Abernathy.Demographics.Service.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
-        public async Task<IActionResult> Update(int Id, PatientDto patientDTO)
+        public async Task<IActionResult> Update(int Id, UpdatePatientDto patientDTO)
         {
             if (patientDTO == null)
             {
@@ -80,7 +80,7 @@ namespace Abernathy.Demographics.Service.Controllers
                 throw new ArgumentOutOfRangeException();
             }
 
-            var result = _patientService.GetAll();
+            _patientService.Update(patientDTO);
             return NoContent();
         }
 

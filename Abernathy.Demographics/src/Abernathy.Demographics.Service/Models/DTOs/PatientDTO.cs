@@ -23,5 +23,7 @@ namespace Abernathy.Demographics.Service.Models.DTOs
                             int Age,
                             DateTime DateOfBirth,
                             Gender Type,
+                            List<PhoneNumberDto> PatientPhoneNumbers,
+                            List<AddressDto> PatientAddresses,
                             DateTimeOffset CreatedDate);
 }

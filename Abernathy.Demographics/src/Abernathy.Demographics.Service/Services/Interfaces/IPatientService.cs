@@ -9,7 +9,8 @@ namespace Abernathy.Demographics.Service.Services
         Task<IEnumerable<PatientDto>> GetAll();
         Task<PatientDto> GetPatientById(int Id);
         Task<CreatedPatientDto> Create(CreatedPatientDto model);
-        void Update(int Id, UpdatePatientDto model);
+        //void Update(int Id, UpdatePatientDto model);
+        Task Update(UpdatePatientDto model);
         void DeletePatientById(int Id);
     }
 }
