@@ -67,7 +67,7 @@ namespace Abernathy.Demographics.Service.Data
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.Type)
+                entity.HasOne(d => d.type)
                     .WithMany(p => p.Patients)
                     .HasForeignKey(d => d.GenderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)

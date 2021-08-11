@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+
 namespace Abernathy.Demographics.Service
 {
     public class Startup
@@ -32,13 +33,11 @@ namespace Abernathy.Demographics.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DemographicsContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 
 
             // Database Layer
-            services.AddTransient<DemographicsContext>();
+            //services.AddTransient<DemographicsContext>();
 
             // Repository Layer
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -50,7 +49,8 @@ namespace Abernathy.Demographics.Service
             // AutoMapper
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Abernathy.Demographics.Service", Version = "v1" });

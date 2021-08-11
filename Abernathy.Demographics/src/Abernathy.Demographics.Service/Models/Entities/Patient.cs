@@ -12,7 +12,7 @@ namespace Abernathy.Demographics.Service.Models.Entities
         public DateTime DateOfBirth { get; set; }
 
         public int GenderId { get; set; }
-        public Gender Type { get; set; }
+        public Gender type { get; set; }
 
         // if you want support many phonenumbers
         public List<PatientPhoneNumber> PatientPhoneNumbers { get; set; } = new List<PatientPhoneNumber>();

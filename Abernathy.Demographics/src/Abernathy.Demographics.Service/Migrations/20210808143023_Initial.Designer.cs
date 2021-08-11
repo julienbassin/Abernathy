@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abernathy.Demographics.Service.Migrations
 {
     [DbContext(typeof(DemographicsContext))]
-    [Migration("20210728063652_Initial")]
+    [Migration("20210808143023_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,22 +65,24 @@ namespace Abernathy.Demographics.Service.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("gender")
+                    b.Property<string>("Type")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genders");
+                    b.ToTable("Gender");
 
                     b.HasData(
                         new
                         {
-                            Id = 1
+                            Id = 1,
+                            Type = "Male"
                         },
                         new
                         {
-                            Id = 2
+                            Id = 2,
+                            Type = "Female"
                         });
                 });
 
@@ -250,9 +252,6 @@ namespace Abernathy.Demographics.Service.Migrations
                     b.Property<int>("PhoneNumberId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("PatientId", "PhoneNumberId");
 
                     b.HasIndex("PhoneNumberId");
@@ -282,13 +281,13 @@ namespace Abernathy.Demographics.Service.Migrations
 
             modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.Patient", b =>
                 {
-                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Gender", "Type")
+                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Gender", "type")
                         .WithMany("Patients")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_Patient_Gender")
                         .IsRequired();
 
-                    b.Navigation("Type");
+                    b.Navigation("type");
                 });
 
             modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PatientAddress", b =>

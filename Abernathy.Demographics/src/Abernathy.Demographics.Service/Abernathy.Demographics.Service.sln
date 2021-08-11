@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abernathy.Demographics.Service", "Abernathy.Demographics.Service.csproj", "{889A8462-CFAC-4A98-A40C-40F7FF427FE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abernaty.Demographics.Test.Unit", "..\Abernaty.Demographics.Test.Unit\Abernaty.Demographics.Test.Unit.csproj", "{1E246787-6992-4934-A4CE-2CC44625102B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{889A8462-CFAC-4A98-A40C-40F7FF427FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{889A8462-CFAC-4A98-A40C-40F7FF427FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{889A8462-CFAC-4A98-A40C-40F7FF427FE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E246787-6992-4934-A4CE-2CC44625102B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E246787-6992-4934-A4CE-2CC44625102B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E246787-6992-4934-A4CE-2CC44625102B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E246787-6992-4934-A4CE-2CC44625102B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

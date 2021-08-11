@@ -25,16 +25,16 @@ namespace Abernathy.Demographics.Service.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genders",
+                name: "Gender",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
+                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genders", x => x.Id);
+                    table.PrimaryKey("PK_Gender", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +69,7 @@ namespace Abernathy.Demographics.Service.Migrations
                     table.ForeignKey(
                         name: "FK_Patient_Gender",
                         column: x => x.GenderId,
-                        principalTable: "Genders",
+                        principalTable: "Gender",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -103,8 +103,7 @@ namespace Abernathy.Demographics.Service.Migrations
                 columns: table => new
                 {
                     PatientId = table.Column<int>(type: "int", nullable: false),
-                    PhoneNumberId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    PhoneNumberId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,14 +123,14 @@ namespace Abernathy.Demographics.Service.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Genders",
-                columns: new[] { "Id", "gender" },
-                values: new object[] { 1, null });
+                table: "Gender",
+                columns: new[] { "Id", "Type" },
+                values: new object[] { 1, "Male" });
 
             migrationBuilder.InsertData(
-                table: "Genders",
-                columns: new[] { "Id", "gender" },
-                values: new object[] { 2, null });
+                table: "Gender",
+                columns: new[] { "Id", "Type" },
+                values: new object[] { 2, "Female" });
 
             migrationBuilder.InsertData(
                 table: "Patient",
@@ -186,7 +185,7 @@ namespace Abernathy.Demographics.Service.Migrations
                 name: "Patient");
 
             migrationBuilder.DropTable(
-                name: "Genders");
+                name: "Gender");
         }
     }
 }
