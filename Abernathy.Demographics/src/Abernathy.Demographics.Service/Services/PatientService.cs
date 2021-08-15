@@ -25,7 +25,7 @@ namespace Abernathy.Demographics.Service.Services
 
         public async Task<IEnumerable<PatientDTO>> GetAllPatients()
         {
-            var entities = _unitOfWork.PatientRepository.GetAll();
+            var entities = _unitOfWork.PatientRepository.GetAll(null, null, p => p.Addresses, p => p.PhoneNumbers);
 
             var result = _mapper.Map<IEnumerable<PatientDTO>>(entities);
 
@@ -154,8 +154,10 @@ namespace Abernathy.Demographics.Service.Services
                     PhoneType = currentPhoneNumber.PhoneType
                 });
             }
-            else if(! entity.PhoneNumbers.Any(pn => pn.Patients.Select(p => p.Id == entity.Id).FirstOrDefault()))
+            else
             {
+                entity.PhoneNumbers = new List<PhoneNumber>();
+
                 entity.PhoneNumbers.Add(new PhoneNumber
                 {
                     number = result.number,
