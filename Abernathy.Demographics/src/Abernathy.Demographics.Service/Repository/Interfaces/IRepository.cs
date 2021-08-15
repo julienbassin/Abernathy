@@ -14,6 +14,8 @@ namespace Abernathy.Demographics.Service.Repository.Interfaces
         List<TEntity> GetAll();
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> expression);
         TEntity GetById(object id);
+        TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> filter = null,
+                                  params Expression<Func<TEntity, object>>[] includes);
         void Update(TEntity entity);
     }
 }

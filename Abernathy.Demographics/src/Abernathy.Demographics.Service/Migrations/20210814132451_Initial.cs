@@ -14,7 +14,7 @@ namespace Abernathy.Demographics.Service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StreetName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    HouseNumber = table.Column<int>(type: "int", maxLength: 6, nullable: false),
+                    HouseNumber = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     ZIPCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Town = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     State = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
@@ -75,49 +75,49 @@ namespace Abernathy.Demographics.Service.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PatientAddress",
+                name: "AddressPatient",
                 columns: table => new
                 {
-                    PatientId = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false)
+                    AddressesId = table.Column<int>(type: "int", nullable: false),
+                    PatientsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientAddress", x => new { x.PatientId, x.AddressId });
+                    table.PrimaryKey("PK_AddressPatient", x => new { x.AddressesId, x.PatientsId });
                     table.ForeignKey(
-                        name: "FK_PatientAddress_Address",
-                        column: x => x.PatientId,
-                        principalTable: "Patient",
+                        name: "FK_AddressPatient_Address_AddressesId",
+                        column: x => x.AddressesId,
+                        principalTable: "Address",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PatientAddress_Patient",
-                        column: x => x.AddressId,
-                        principalTable: "Address",
+                        name: "FK_AddressPatient_Patient_PatientsId",
+                        column: x => x.PatientsId,
+                        principalTable: "Patient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PatientPhoneNumbers",
+                name: "PatientPhoneNumber",
                 columns: table => new
                 {
-                    PatientId = table.Column<int>(type: "int", nullable: false),
-                    PhoneNumberId = table.Column<int>(type: "int", nullable: false)
+                    PatientsId = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumbersId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientPhoneNumbers", x => new { x.PatientId, x.PhoneNumberId });
+                    table.PrimaryKey("PK_PatientPhoneNumber", x => new { x.PatientsId, x.PhoneNumbersId });
                     table.ForeignKey(
-                        name: "FK_PatientPhoneNumber_Patient",
-                        column: x => x.PhoneNumberId,
-                        principalTable: "PhoneNumber",
+                        name: "FK_PatientPhoneNumber_Patient_PatientsId",
+                        column: x => x.PatientsId,
+                        principalTable: "Patient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PatientPhoneNumber_PhoneNumber",
-                        column: x => x.PatientId,
-                        principalTable: "Patient",
+                        name: "FK_PatientPhoneNumber_PhoneNumber_PhoneNumbersId",
+                        column: x => x.PhoneNumbersId,
+                        principalTable: "PhoneNumber",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -137,19 +137,24 @@ namespace Abernathy.Demographics.Service.Migrations
                 columns: new[] { "Id", "Age", "DateOfBirth", "FirstName", "GenderId", "LastName" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "James", 1, "Smith" },
-                    { 3, 0, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Masaaki", 1, "Abe" },
-                    { 5, 0, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nurma", 1, "Haitam" },
-                    { 7, 0, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Brian", 1, "Aleesami" },
-                    { 10, 0, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "King", 1, "Andrew" },
-                    { 11, 0, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Locke", 1, "Brian" },
-                    { 2, 0, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jiyeon", 2, "Lee" },
-                    { 4, 0, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anna", 2, "Svensson" },
-                    { 6, 0, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lucy", 2, "Johnson" },
-                    { 8, 0, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Elizabeth", 2, "van Lingen" },
-                    { 9, 0, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Okparaebo", 2, "Vivienne" },
-                    { 12, 0, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wang", 2, "Su Lin" }
+                    { 1, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "James", 1, "Smith" },
+                    { 3, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Masaaki", 1, "Abe" },
+                    { 5, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nurma", 1, "Haitam" },
+                    { 7, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Brian", 1, "Aleesami" },
+                    { 10, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "King", 1, "Andrew" },
+                    { 11, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Locke", 1, "Brian" },
+                    { 2, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jiyeon", 2, "Lee" },
+                    { 4, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anna", 2, "Svensson" },
+                    { 6, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lucy", 2, "Johnson" },
+                    { 8, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Elizabeth", 2, "van Lingen" },
+                    { 9, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Okparaebo", 2, "Vivienne" },
+                    { 12, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wang", 2, "Su Lin" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AddressPatient_PatientsId",
+                table: "AddressPatient",
+                column: "PatientsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patient_GenderId",
@@ -157,32 +162,27 @@ namespace Abernathy.Demographics.Service.Migrations
                 column: "GenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PatientAddress_AddressId",
-                table: "PatientAddress",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PatientPhoneNumbers_PhoneNumberId",
-                table: "PatientPhoneNumbers",
-                column: "PhoneNumberId");
+                name: "IX_PatientPhoneNumber_PhoneNumbersId",
+                table: "PatientPhoneNumber",
+                column: "PhoneNumbersId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PatientAddress");
+                name: "AddressPatient");
 
             migrationBuilder.DropTable(
-                name: "PatientPhoneNumbers");
+                name: "PatientPhoneNumber");
 
             migrationBuilder.DropTable(
                 name: "Address");
 
             migrationBuilder.DropTable(
-                name: "PhoneNumber");
+                name: "Patient");
 
             migrationBuilder.DropTable(
-                name: "Patient");
+                name: "PhoneNumber");
 
             migrationBuilder.DropTable(
                 name: "Gender");

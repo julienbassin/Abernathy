@@ -29,7 +29,7 @@ namespace Abernathy.Demographics.Service.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = _patientService.GetAll();
+            var result = _patientService.GetAllPatients();
             return Ok(result);
         }
 
@@ -58,7 +58,7 @@ namespace Abernathy.Demographics.Service.Controllers
                 throw new ArgumentNullException();
             }
 
-            var result = _patientService.Create(patientDTO);
+            var result = _patientService.CreatePatient(patientDTO);
 
             // return an anonyme object with ID
             return CreatedAtAction(nameof(GetById), new { result.Id }, result);
@@ -80,7 +80,7 @@ namespace Abernathy.Demographics.Service.Controllers
                 throw new ArgumentOutOfRangeException();
             }
 
-            _patientService.Update(patientDTO);
+            _patientService.UpdatePatient(Id, patientDTO);
             return NoContent();
         }
 

@@ -19,7 +19,7 @@ namespace Abernathy.Demographics.Service.Models.DTOs
         public DateTime DateOfBirth { get; set; }
 
         public int GenderId { get; set; }
-        public List<AddressDTO> Addresses { get; set; }
-        public List<PhoneNumberDto> PhoneNumbers { get; set; }
+        public ICollection<AddressDTO> Addresses { get; set; }
+        public ICollection<PhoneNumberDto> PhoneNumbers { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace Abernathy.Demographics.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PatientDTO>> GetAll()
+        public async Task<IEnumerable<PatientDTO>> GetAllPatients()
         {
             var entities = _unitOfWork.PatientRepository.GetAll();
 
@@ -51,7 +51,7 @@ namespace Abernathy.Demographics.Service.Services
             return result;
         }
 
-        public async Task<PatientDTO> Create(PatientDTO model)
+        public async Task<PatientDTO> CreatePatient(PatientDTO model)
         {
 
             var currentPatient = _unitOfWork.PatientRepository.Find(p =>
@@ -81,14 +81,12 @@ namespace Abernathy.Demographics.Service.Services
             // handle phonenumber
             _handlePhoneNumbers(model.PhoneNumbers, patient);
 
-            // then map all theses properties to newPatient
-
             try
             {
-                var newPatient = _mapper.Map<Patient>(model);
-                _unitOfWork.PatientRepository.Add(newPatient);
+                var currentModel = _mapper.Map<Patient>(model);
+                _unitOfWork.PatientRepository.Add(currentModel);
+                _unitOfWork.CommitAsync();
 
-                // Create a patient
                 var result = _mapper.Map<PatientDTO>(model);
                 return result;
             }
@@ -96,7 +94,7 @@ namespace Abernathy.Demographics.Service.Services
             {
 
                 throw new ArgumentException($"{ex.Message}");
-                _unitOfWork.RollBackAsync();
+                await _unitOfWork.RollBackAsync();
             }
         }
 
@@ -150,20 +148,18 @@ namespace Abernathy.Demographics.Service.Services
 
                 _unitOfWork.PhoneNumberRepository.Add(phoneNumber);
 
-                entity.PatientPhoneNumbers.Add(new PatientPhoneNumber
+                entity.PhoneNumbers.Add(new PhoneNumber
                 {
-                     Patient = entity,
-                     PhoneNumber = phoneNumber
-
+                    number = currentPhoneNumber.number,
+                    PhoneType = currentPhoneNumber.PhoneType
                 });
             }
-            else if(! entity.PatientPhoneNumbers.Any(pn => pn.PatientId == entity.Id && pn.PhoneNumberId == result.Id))
+            else if(! entity.PhoneNumbers.Any(pn => pn.Patients.Select(p => p.Id == entity.Id).FirstOrDefault()))
             {
-                entity.PatientPhoneNumbers.Add(new PatientPhoneNumber
+                entity.PhoneNumbers.Add(new PhoneNumber
                 {
-                    Patient = entity,
-                    PhoneNumber = result
-
+                    number = result.number,
+                    PhoneType = result.PhoneType
                 });
             }         
 
@@ -171,75 +167,60 @@ namespace Abernathy.Demographics.Service.Services
 
         private async Task _insertAddresses(AddressDTO currentModel, Patient entity)
         {
-            // check if address is present
-            //if (true)
-            //{
 
-            //}
-
-            var result = _unitOfWork.AddressRepository.Find(pa =>
-                                                            pa.StreetName.Contains(currentModel.StreetName) &&
-                                                            pa.Town.Contains(currentModel.Town) &&
-                                                            pa.ZipCode.Contains(currentModel.ZipCode) &&
-                                                            pa.State.Contains(currentModel.State)).FirstOrDefault();
-
-            if (result == null)
+            if (! entity.Addresses.Any())
             {
+                entity.Addresses.Add(new Address
+                {
+                    HouseNumber = currentModel.HouseNumber,
+                    StreetName = currentModel.StreetName,
+                    Town = currentModel.Town,
+                    ZipCode = currentModel.ZipCode,
+                    State = currentModel.State
+                });
+
                 var address = _mapper.Map<Address>(currentModel);
                 _unitOfWork.AddressRepository.Add(address);
-
-                entity.PatientAddresses.Add(new PatientAddress 
-                {
-                    Patient = entity,
-                    Address = address                
-                });
             }
-            else if(!entity.PatientAddresses.Any(pa => pa.PatientId == entity.Id && pa.AddressId == result.Id))
+            else
             {
-                entity.PatientAddresses.Add(new PatientAddress
+                entity.Addresses = new List<Address>();
+
+                entity.Addresses.Add(new Address
                 {
-                    Patient = entity,
-                    Address = result
+                     HouseNumber = currentModel.HouseNumber,
+                     StreetName = currentModel.StreetName,
+                     Town = currentModel.Town,
+                     ZipCode = currentModel.ZipCode,
+                     State = currentModel.State
                 });
             }
         }
 
-        public async Task Update(PatientDTO model)
+        public async Task UpdatePatient(int Id, PatientDTO model)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException();
-            }
 
-            //if (Id <= 0)
-            //{
-            //    throw new ArgumentOutOfRangeException();
-            //}
+            var existingPatient = _unitOfWork.PatientRepository.GetFirstOrDefault(p => p.Id == Id, p => p.Addresses, p => p.PhoneNumbers);
 
-            // then map all theses properties to newPatient
-
-            //var existingPatient = _unitOfWork.PatientRepository.GetById(Id);
-
-            var currentPatient = _mapper.Map<Patient>(model);
-
-            // handle address
-            //await _updateAddresses(model.PatientAddresses, currentPatient);
-
-            // handle phonenumber
-            //await _updatePhoneNumbers(model.PatientPhoneNumbers, currentPatient);
+            var currentPatient = _mapper.Map<Patient>(existingPatient);
 
             try
             {
+                // handle address
+                await _updateAddresses(model.Addresses, currentPatient);
                 _unitOfWork.PatientRepository.Update(currentPatient);
-                _unitOfWork.CommitAsync();
+
+                // handle phonenumber
+                await _updatePhoneNumbers(model.PhoneNumbers, currentPatient);
+                _unitOfWork.PatientRepository.Update(currentPatient);
+                await _unitOfWork.CommitAsync();
             }
             catch (Exception)
             {
 
                 throw;
                 _unitOfWork.RollBackAsync();
-            }
-            
+            }        
 
         }
 
@@ -258,15 +239,28 @@ namespace Abernathy.Demographics.Service.Services
             {
                 foreach (var currentModel in modelArray)
                 {
-                    //await _insertPhoneNumbers(currentModel, entity);
+                    await _insertPhoneNumbers(currentModel, entity);
                 }
             }
         }
 
-        private Task _updateAddresses(IEnumerable<AddressDTO> addresses, 
+        private async Task _updateAddresses(IEnumerable<AddressDTO> addresses, 
                                         Patient entity)
         {
-            throw new NotImplementedException();
+            if (addresses == null || entity == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var modelArray = addresses as AddressDTO[] ?? addresses.ToArray();
+
+            if (modelArray.Any())
+            {
+                foreach (var currentModel in modelArray)
+                {
+                    await _insertAddresses(currentModel, entity);
+                }
+            }
         }
 
         public async Task DeletePatientById(int Id)

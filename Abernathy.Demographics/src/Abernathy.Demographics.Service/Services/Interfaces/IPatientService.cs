@@ -6,11 +6,11 @@ namespace Abernathy.Demographics.Service.Services
 {
     public interface IPatientService
     {
-        Task<IEnumerable<PatientDTO>> GetAll();
+        Task<IEnumerable<PatientDTO>> GetAllPatients();
         Task<PatientDTO> GetPatientById(int Id);
-        Task<PatientDTO> Create(PatientDTO model);
+        Task<PatientDTO> CreatePatient(PatientDTO model);
         //void Update(int Id, UpdatePatientDto model);
-        Task Update(PatientDTO model);
+        Task UpdatePatient(int Id, PatientDTO model);
         Task DeletePatientById(int Id);
     }
 }
