@@ -17,7 +17,7 @@ namespace Abernathy.history.Service.Repository
         public HistoryRepository()
         {
             var mongoClient = new MongoClient("mongodb://localhost:27017");
-            var database = mongoClient.GetDatabase("Catalog");
+            var database = mongoClient.GetDatabase("Notes");
             dbCollection = database.GetCollection<Note>(CollectionName);
         }
 

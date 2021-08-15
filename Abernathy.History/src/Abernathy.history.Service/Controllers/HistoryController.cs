@@ -1,4 +1,7 @@
-﻿using Abernathy.history.Service.Services.Interfaces;
+﻿using Abernathy.history.Service.Models.DTOs;
+using Abernathy.history.Service.Models.Entities;
+using Abernathy.history.Service.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,17 +15,29 @@ namespace Abernathy.history.Service.Controllers
     public class HistoryController : ControllerBase
     {
         private IHistoryService _historyService;
+
+        public HistoryController(IHistoryService historyService)
+        {
+            _historyService = historyService;
+        }
+
         [HttpGet()]
-        public async Task<IEnumerable<ItemDto>> GetAsync()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IEnumerable<Note>> GetAsync()
         {
             var items = (await _itemsRepo.GetAllAsync()).Select(item => item.AsDto());
             return items;
         }
 
-        [HttpGet("{Id}")]
-        public async Task<ActionResult<ItemDto>> GetByIdAsync(Guid Id)
+        [HttpGet("note/{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Note>> GetByIdAsync(int Id)
         {
-            var item = await _itemsRepo.GetAsync(Id);
+            var item = await _historyService.GetNoteById(Id);
 
             if (item == null)
             {
@@ -33,7 +48,10 @@ namespace Abernathy.history.Service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ItemDto>> PostAsync(CreatedItemDto model)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Note>> PostAsync(CreatedNoteDto model)
         {
             if (model == null)
             {
@@ -54,33 +72,35 @@ namespace Abernathy.history.Service.Controllers
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutAsync(Guid Id, ItemDto updatedModel)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PutAsync(int Id, NoteDTO updatedModel)
         {
             var existingItem = await _itemsRepo.GetAsync(Id);
 
             if (existingItem == null)
             {
                 return NotFound();
-            }
+            }            
 
-            existingItem.Name = updatedModel.Name;
-            existingItem.Description = updatedModel.Description;
-            existingItem.Price = updatedModel.Price;
-
-            await _itemsRepo.UpdateAsync(existingItem);
+            
             return NoContent();
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(Guid Id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAsync(int Id)
         {
-            var existingItem = await _itemsRepo.GetAsync(Id);
-            if (existingItem == null)
+            var existingNote = await _historyService.GetNoteByIdAsync(Id);
+            if (existingNote == null)
             {
                 return NotFound();
             }
 
-            await _itemsRepo.RemoveAsync(existingItem.Id);
+            
             return NoContent();
         }
     }
