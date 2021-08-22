@@ -14,10 +14,8 @@ namespace Abernathy.history.Service.Repository
         private readonly IMongoCollection<Note> dbCollection;
         private readonly FilterDefinitionBuilder<Note> filterBuilder = Builders<Note>.Filter;
 
-        public HistoryRepository()
+        public HistoryRepository(IMongoDatabase database)
         {
-            var mongoClient = new MongoClient("mongodb://localhost:27017");
-            var database = mongoClient.GetDatabase("Notes");
             dbCollection = database.GetCollection<Note>(CollectionName);
         }
 

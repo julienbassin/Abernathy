@@ -4,8 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Abernathy.history.Service.Configuration;
+using Abernathy.history.Service.Repository;
+using Abernathy.history.Service.Repository.Interfaces;
 using Abernathy.history.Service.Services;
 using Abernathy.history.Service.Services.Interfaces;
+using Abernathy.history.Service.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -19,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -26,6 +30,8 @@ namespace Abernathy.history.Service
 {
     public class Startup
     {
+        private ServiceSettings serviceSettings;
+
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
@@ -41,6 +47,20 @@ namespace Abernathy.history.Service
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
 
+            serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+
+            services.AddSingleton(serviceProvider => { 
+            
+                var mongoDbSettings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+                var mongoClient = new MongoClient(mongoDbSettings.ConnectionString);
+                return mongoClient.GetDatabase(serviceSettings.ServiceName);
+            });
+
+            services.AddTransient<IHistoryRepository, HistoryRepository>();
+
+            services.AddTransient<IHistoryService, HistoryService>();
+            services.AddTransient<IHttpExternalApiService, ExternalHttpApiService>();
+
             services.AddHttpClient<IHttpExternalApiService, ExternalHttpApiService>(client =>
             {
                 client.BaseAddress = new Uri(Configuration["ApiConfigs:Demographics:Uri"]);
@@ -50,6 +70,25 @@ namespace Abernathy.history.Service
             services.AddControllers(options => { 
                 options.SuppressAsyncSuffixInActionNames = false;
             });
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder // For testing using docker-compose
+                        .WithOrigins("http://localhost:8081")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+
+                    builder // For testing with non-container client
+                        .WithOrigins("http://localhost:5000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Abernathy.history.Service", Version = "v1" });
