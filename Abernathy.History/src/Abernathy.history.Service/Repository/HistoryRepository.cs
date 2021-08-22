@@ -23,34 +23,36 @@ namespace Abernathy.history.Service.Repository
 
         public async Task<IReadOnlyCollection<Note>> GetAllAsync()
         {
-            return await dbCollection.Find(filterBuilder.Empty).ToListAsync();
+            var entites = await dbCollection.Find(filterBuilder.Empty).ToListAsync();
+            return entites;
         }
 
-        public async Task<Note> GetAsync(int Id)
+        public async Task<IEnumerable<Note>> GetAsync(int Id)
         {
             FilterDefinition<Note> filter = filterBuilder.Eq(entity => entity.Id, Id);
-            return await dbCollection.Find(filter).FirstOrDefaultAsync();
+            var entites = await dbCollection.FindAsync(filter);
+            return entites.ToEnumerable();
         }
 
-        public async Task CreateAsync(Note entity)
+        public async Task CreateAsync(Note model)
         {
-            if (entity == null)
+            if (model == null)
             {
-                throw new ArgumentNullException(nameof(entity));
+                throw new ArgumentNullException(nameof(model));
             }
 
-            await dbCollection.InsertOneAsync(entity);
+            await dbCollection.InsertOneAsync(model);
         }
 
-        public async Task UpdateAsync(Note entity)
+        public async Task UpdateAsync(Note model)
         {
-            if (entity == null)
+            if (model == null)
             {
-                throw new ArgumentNullException(nameof(entity));
+                throw new ArgumentNullException(nameof(model));
             }
 
-            FilterDefinition<Note> filter = filterBuilder.Eq(existingEntity => existingEntity.Id, entity.Id);
-            await dbCollection.ReplaceOneAsync(filter, entity);
+            FilterDefinition<Note> filter = filterBuilder.Eq(existingEntity => existingEntity.Id, model.Id);
+            await dbCollection.ReplaceOneAsync(filter, model);
         }
 
         public async Task RemoveAsync(int Id)

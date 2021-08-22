@@ -27,8 +27,8 @@ namespace Abernathy.history.Service.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IEnumerable<Note>> GetAsync()
         {
-            var items = (await _itemsRepo.GetAllAsync()).Select(item => item.AsDto());
-            return items;
+            var notes = await _historyService.GetAllNotes();
+            return notes;
         }
 
         [HttpGet("note/{Id}")]
@@ -44,62 +44,55 @@ namespace Abernathy.history.Service.Controllers
                 return NotFound();
             }
 
-            return item.AsDto();
+            return item;
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Note>> PostAsync(CreatedNoteDto model)
+        public async Task<ActionResult<Note>> PostAsync(NoteDTO model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException();
             }
-
-            var item = new Item
-            {
-                Name = model.Name,
-                Description = model.Description,
-                Price = model.Price,
-                CreatedDate = DateTimeOffset.UtcNow
-
-            };
-
-            await _itemsRepo.CreateAsync(item);
-            return CreatedAtAction(nameof(GetByIdAsync), new { item.Id }, item);
+            
+            return CreatedAtAction(nameof(GetByIdAsync), new { model.Id }, model);
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("note/{Id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutAsync(int Id, NoteDTO updatedModel)
         {
-            var existingItem = await _itemsRepo.GetAsync(Id);
+            var existingItem = await _historyService.GetNoteById(Id);
 
             if (existingItem == null)
             {
                 return NotFound();
-            }            
-
+            }         
             
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("note/{Id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAsync(int Id)
         {
-            var existingNote = await _historyService.GetNoteByIdAsync(Id);
+            if (Id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var existingNote = await _historyService.GetNoteById(Id);
             if (existingNote == null)
             {
                 return NotFound();
             }
-
             
             return NoContent();
         }
