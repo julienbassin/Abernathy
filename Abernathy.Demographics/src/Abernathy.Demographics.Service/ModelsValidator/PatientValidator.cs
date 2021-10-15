@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Abernathy.Demographics.Service.ModelsValidator
 {
-    public class PatientValidator : ValidatorBase<PatientDto>
+    public class PatientValidator : ValidatorBase<PatientDTO>
     {
         public PatientValidator()
         {

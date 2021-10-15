@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abernathy.Demographics.Service.Migrations
 {
     [DbContext(typeof(DemographicsContext))]
-    [Migration("20210728063652_Initial")]
+    [Migration("20210814132451_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,9 +28,10 @@ namespace Abernathy.Demographics.Service.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("HouseNumber")
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
                         .HasMaxLength(6)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -65,22 +66,24 @@ namespace Abernathy.Demographics.Service.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("gender")
+                    b.Property<string>("Type")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genders");
+                    b.ToTable("Gender");
 
                     b.HasData(
                         new
                         {
-                            Id = 1
+                            Id = 1,
+                            Type = "Male"
                         },
                         new
                         {
-                            Id = 2
+                            Id = 2,
+                            Type = "Female"
                         });
                 });
 
@@ -120,7 +123,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 1,
-                            Age = 0,
+                            Age = 61,
                             DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "James",
                             GenderId = 1,
@@ -129,7 +132,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 2,
-                            Age = 0,
+                            Age = 61,
                             DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Jiyeon",
                             GenderId = 2,
@@ -138,7 +141,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 3,
-                            Age = 0,
+                            Age = 11,
                             DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Masaaki",
                             GenderId = 1,
@@ -147,7 +150,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 4,
-                            Age = 0,
+                            Age = 11,
                             DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Anna",
                             GenderId = 2,
@@ -156,7 +159,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 5,
-                            Age = 0,
+                            Age = 61,
                             DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Nurma",
                             GenderId = 1,
@@ -165,7 +168,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 6,
-                            Age = 0,
+                            Age = 61,
                             DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Lucy",
                             GenderId = 2,
@@ -174,7 +177,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 7,
-                            Age = 0,
+                            Age = 11,
                             DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Brian",
                             GenderId = 1,
@@ -183,7 +186,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 8,
-                            Age = 0,
+                            Age = 11,
                             DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Elizabeth",
                             GenderId = 2,
@@ -192,7 +195,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 9,
-                            Age = 0,
+                            Age = 61,
                             DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Okparaebo",
                             GenderId = 2,
@@ -201,7 +204,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 10,
-                            Age = 0,
+                            Age = 61,
                             DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "King",
                             GenderId = 1,
@@ -210,7 +213,7 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 11,
-                            Age = 0,
+                            Age = 11,
                             DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Locke",
                             GenderId = 1,
@@ -219,45 +222,12 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 12,
-                            Age = 0,
+                            Age = 11,
                             DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Wang",
                             GenderId = 2,
                             LastName = "Su Lin"
                         });
-                });
-
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PatientAddress", b =>
-                {
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PatientId", "AddressId");
-
-                    b.HasIndex("AddressId");
-
-                    b.ToTable("PatientAddress");
-                });
-
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PatientPhoneNumber", b =>
-                {
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PhoneNumberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("PatientId", "PhoneNumberId");
-
-                    b.HasIndex("PhoneNumberId");
-
-                    b.ToTable("PatientPhoneNumbers");
                 });
 
             modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PhoneNumber", b =>
@@ -280,79 +250,80 @@ namespace Abernathy.Demographics.Service.Migrations
                     b.ToTable("PhoneNumber");
                 });
 
+            modelBuilder.Entity("AddressPatient", b =>
+                {
+                    b.Property<int>("AddressesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PatientsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AddressesId", "PatientsId");
+
+                    b.HasIndex("PatientsId");
+
+                    b.ToTable("AddressPatient");
+                });
+
+            modelBuilder.Entity("PatientPhoneNumber", b =>
+                {
+                    b.Property<int>("PatientsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PhoneNumbersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PatientsId", "PhoneNumbersId");
+
+                    b.HasIndex("PhoneNumbersId");
+
+                    b.ToTable("PatientPhoneNumber");
+                });
+
             modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.Patient", b =>
                 {
-                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Gender", "Type")
+                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Gender", "type")
                         .WithMany("Patients")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_Patient_Gender")
                         .IsRequired();
 
-                    b.Navigation("Type");
+                    b.Navigation("type");
                 });
 
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PatientAddress", b =>
+            modelBuilder.Entity("AddressPatient", b =>
                 {
-                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Address", "Address")
-                        .WithMany("PatientAddresses")
-                        .HasForeignKey("AddressId")
-                        .HasConstraintName("FK_PatientAddress_Patient")
+                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Address", null)
+                        .WithMany()
+                        .HasForeignKey("AddressesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Patient", "Patient")
-                        .WithMany("PatientAddresses")
-                        .HasForeignKey("PatientId")
-                        .HasConstraintName("FK_PatientAddress_Address")
+                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PatientPhoneNumber", b =>
+            modelBuilder.Entity("PatientPhoneNumber", b =>
                 {
-                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Patient", "Patient")
-                        .WithMany("PatientPhoneNumbers")
-                        .HasForeignKey("PatientId")
-                        .HasConstraintName("FK_PatientPhoneNumber_PhoneNumber")
+                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.PhoneNumber", "PhoneNumber")
-                        .WithMany("PatientPhoneNumbers")
-                        .HasForeignKey("PhoneNumberId")
-                        .HasConstraintName("FK_PatientPhoneNumber_Patient")
+                    b.HasOne("Abernathy.Demographics.Service.Models.Entities.PhoneNumber", null)
+                        .WithMany()
+                        .HasForeignKey("PhoneNumbersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Patient");
-
-                    b.Navigation("PhoneNumber");
-                });
-
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.Address", b =>
-                {
-                    b.Navigation("PatientAddresses");
                 });
 
             modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.Gender", b =>
                 {
                     b.Navigation("Patients");
-                });
-
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.Patient", b =>
-                {
-                    b.Navigation("PatientAddresses");
-
-                    b.Navigation("PatientPhoneNumbers");
-                });
-
-            modelBuilder.Entity("Abernathy.Demographics.Service.Models.Entities.PhoneNumber", b =>
-                {
-                    b.Navigation("PatientPhoneNumbers");
                 });
 #pragma warning restore 612, 618
         }

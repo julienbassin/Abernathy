@@ -24,6 +24,34 @@ namespace Abernathy.Demographics.Service.Repository
             return _dbContext.Set<TEntity>().Find(id);
         }
 
+        public virtual TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> filter = null, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include);
+
+            return query.FirstOrDefault(filter);
+        }
+
+        public virtual List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, 
+                                            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
+                                            params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+                query = query.Include(include);
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            return query.ToList();
+        }
+
         public List<TEntity> GetAll()
         {
             return _dbContext.Set<TEntity>().ToList();
@@ -44,7 +72,6 @@ namespace Abernathy.Demographics.Service.Repository
             try
             {
                 _dbContext.Set<TEntity>().Add(entity);
-                //await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -57,8 +84,8 @@ namespace Abernathy.Demographics.Service.Repository
         {
             if (entity != null)
             {
+                // entrer en mode modification
                 _dbContext.Set<TEntity>().Update(entity);
-                //await _dbContext.SaveChangesAsync();
             }
         }
 

@@ -8,9 +8,8 @@ namespace Abernathy.Demographics.Service.Mapping
     {
         public AddressProfile()
         {
-            CreateMap<AddressDto, Address>().ReverseMap();
-            CreateMap<CreatedAddressDto, Address>().ReverseMap();
-            CreateMap<UpdateAddressto, Address>().ReverseMap();
+            CreateMap<AddressDTO, Address>();
+            CreateMap<Address, AddressDTO>();
         }
     }
 }

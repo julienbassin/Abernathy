@@ -13,8 +13,8 @@ namespace Abernathy.Demographics.Service.Data
         public DbSet<Address> Address { get; set; }
         public DbSet<Gender> Gender { get; set; }
         public DbSet<PhoneNumber> PhoneNumber { get; set; }
-        public DbSet<PatientAddress> PatientAddress { get; set; }
-        public DbSet<PatientPhoneNumber> PatientPhoneNumbers { get; set; }
+        //public DbSet<PatientAddress> PatientAddress { get; set; }
+        //public DbSet<PatientPhoneNumber> PatientPhoneNumbers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -67,7 +67,7 @@ namespace Abernathy.Demographics.Service.Data
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.Type)
+                entity.HasOne(d => d.type)
                     .WithMany(p => p.Patients)
                     .HasForeignKey(d => d.GenderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -75,39 +75,39 @@ namespace Abernathy.Demographics.Service.Data
                     .IsRequired();
             });
 
-            modelBuilder.Entity<PatientAddress>(entity =>
-            {
-                entity.HasKey(e => new { e.PatientId, e.AddressId });
+            //modelBuilder.Entity<PatientAddress>(entity =>
+            //{
+            //    entity.HasKey(e => new { e.PatientId, e.AddressId });
 
-                entity.HasOne<Patient>(d => d.Patient)
-                    .WithMany(p => p.PatientAddresses)
-                    .HasForeignKey(d => d.PatientId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_PatientAddress_Address");
+            //    entity.HasOne(d => d.Address)
+            //        .WithMany(p => p.PatientAddresses)
+            //        .HasForeignKey(d => d.AddressId)
+            //        .OnDelete(DeleteBehavior.Cascade)
+            //        .HasConstraintName("FK_PatientAddress_Address");
 
-                entity.HasOne(d => d.Address)
-                    .WithMany(p => p.PatientAddresses)
-                    .HasForeignKey(d => d.AddressId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_PatientAddress_Patient");
-            });
+            //    entity.HasOne(d => d.Patient)
+            //        .WithMany(p => p.PatientAddresses)
+            //        .HasForeignKey(d => d.PatientId)
+            //        .OnDelete(DeleteBehavior.Cascade)
+            //        .HasConstraintName("FK_PatientAddress_Patient");
+            //});
 
-            modelBuilder.Entity<PatientPhoneNumber>(entity =>
-            {
-                entity.HasKey(e => new { e.PatientId, e.PhoneNumberId });
+            //modelBuilder.Entity<PatientPhoneNumber>(entity =>
+            //{
+            //    entity.HasKey(e => new { e.PatientId, e.PhoneNumberId });
 
-                entity.HasOne(a => a.Patient)
-                    .WithMany(b => b.PatientPhoneNumbers)
-                    .HasForeignKey(a => a.PatientId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_PatientPhoneNumber_PhoneNumber");
+            //    entity.HasOne(a => a.PhoneNumber)
+            //        .WithMany(b => b.PatientPhoneNumbers)
+            //        .HasForeignKey(a => a.PhoneNumberId)
+            //        .OnDelete(DeleteBehavior.Cascade)
+            //        .HasConstraintName("FK_PatientPhoneNumber_PhoneNumber");
 
-                entity.HasOne(a => a.PhoneNumber)
-                    .WithMany(b => b.PatientPhoneNumbers)
-                    .HasForeignKey(a => a.PhoneNumberId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_PatientPhoneNumber_Patient");
-            });
+            //    entity.HasOne(a => a.Patient)
+            //        .WithMany(b => b.PatientPhoneNumbers)
+            //        .HasForeignKey(a => a.PatientId)
+            //        .OnDelete(DeleteBehavior.Cascade)
+            //        .HasConstraintName("FK_PatientPhoneNumber_Patient");
+            //});
 
             modelBuilder.Entity<Gender>(entity =>
             {
@@ -136,9 +136,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 1,
                         LastName = "Smith",
                         FirstName = "James",
+                        Age = 61,
                         DateOfBirth = new DateTime(1960, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -146,9 +147,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 2,
                         LastName = "Lee",
                         FirstName = "Jiyeon",
+                        Age = 61,
                         DateOfBirth = new DateTime(1960, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -156,9 +158,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 1,
                         LastName = "Abe",
                         FirstName = "Masaaki",
+                        Age = 11,
                         DateOfBirth = new DateTime(2010, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -166,9 +169,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 2,
                         LastName = "Svensson",
                         FirstName = "Anna",
+                        Age = 11,
                         DateOfBirth = new DateTime(2010, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -176,9 +180,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 1,
                         LastName = "Haitam",
                         FirstName = "Nurma",
+                        Age = 61,
                         DateOfBirth = new DateTime(1960, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -186,9 +191,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 2,
                         LastName = "Johnson",
                         FirstName = "Lucy",
+                        Age = 61,
                         DateOfBirth = new DateTime(1960, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -196,9 +202,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 1,
                         LastName = "Aleesami",
                         FirstName = "Brian",
+                        Age = 11,
                         DateOfBirth = new DateTime(2010, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -206,9 +213,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 2,
                         LastName = "van Lingen",
                         FirstName = "Elizabeth",
+                        Age = 11,
                         DateOfBirth = new DateTime(2010, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -216,9 +224,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 2,
                         FirstName = "Okparaebo",
                         LastName = "Vivienne",
+                        Age = 61,
                         DateOfBirth = new DateTime(1960, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -226,9 +235,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 1,
                         FirstName = "King",
                         LastName = "Andrew",
+                        Age = 61,
                         DateOfBirth = new DateTime(1960, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -236,9 +246,10 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 1,
                         FirstName = "Locke",
                         LastName = "Brian",
+                        Age = 11,
                         DateOfBirth = new DateTime(2010, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     },
                     new Patient
                     {
@@ -246,11 +257,12 @@ namespace Abernathy.Demographics.Service.Data
                         GenderId = 2,
                         FirstName = "Wang",
                         LastName = "Su Lin",
+                        Age = 11,
                         DateOfBirth = new DateTime(2010, 1, 1),
-                        PatientAddresses = new List<PatientAddress>(),
-                        PatientPhoneNumbers = new List<PatientPhoneNumber>()
+                        Addresses = new List<Address>(),
+                        PhoneNumbers = new List<PhoneNumber>()
                     }
-                );
+                ) ;
         }
     }
 

@@ -29,7 +29,7 @@ namespace Abernathy.Demographics.Service.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = _patientService.GetAll();
+            var result = _patientService.GetAllPatients();
             return Ok(result);
         }
 
@@ -51,24 +51,24 @@ namespace Abernathy.Demographics.Service.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public async Task<IActionResult> Add(CreatedPatientDto patientDTO)
+        public async Task<IActionResult> Add(PatientDTO patientDTO)
         {
             if (patientDTO == null)
             {
                 throw new ArgumentNullException();
             }
 
-            var result = _patientService.Create(patientDTO);
+            var result = _patientService.CreatePatient(patientDTO);
 
             // return an anonyme object with ID
-            return CreatedAtAction(nameof(GetById), new { result.Id }, result); ;
+            return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
-        public async Task<IActionResult> Update(int Id, UpdatePatientDto patientDTO)
+        public async Task<IActionResult> Update(int Id, PatientDTO patientDTO)
         {
             if (patientDTO == null)
             {
@@ -80,7 +80,7 @@ namespace Abernathy.Demographics.Service.Controllers
                 throw new ArgumentOutOfRangeException();
             }
 
-            _patientService.Update(patientDTO);
+            _patientService.UpdatePatient(Id, patientDTO);
             return NoContent();
         }
 
@@ -94,7 +94,7 @@ namespace Abernathy.Demographics.Service.Controllers
                 throw new ArgumentOutOfRangeException();
             }
 
-            _patientService.DeletePatientById(Id);
+            await _patientService.DeletePatientById(Id);
             return NoContent();
         }
     }

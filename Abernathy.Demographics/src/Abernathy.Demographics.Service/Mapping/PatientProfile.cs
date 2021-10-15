@@ -8,9 +8,14 @@ namespace Abernathy.Demographics.Service.Mapping
     {
         public PatientProfile()
         {
-            CreateMap<PatientDto, Patient>().ReverseMap();
-            CreateMap<UpdatePatientDto, Patient>().ReverseMap();
-            CreateMap<CreatedPatientDto, Patient>().ReverseMap();
+            CreateMap<PatientDTO, Patient>();
+            //CreateMap<Patient, PatientDTO>().ForMember(
+            //    dest => dest.PhoneNumbers,
+            //    opt => opt.MapFrom(src => src.PatientPhoneNumbers)
+            //);
+            CreateMap<Patient, PatientDTO>();
+
+            
         }
     }
 }

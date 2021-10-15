@@ -8,9 +8,8 @@ namespace Abernathy.Demographics.Service.Mapping
     {
         public PhoneNumberProfile()
         {
-            CreateMap<PhoneNumberDto, PhoneNumber>().ReverseMap();
-            CreateMap<CreatedPhoneNumberDto, PhoneNumber>().ReverseMap();
-            CreateMap<UpdatePhoneNumberDto, PhoneNumber>().ReverseMap();
+            CreateMap<PhoneNumberDto, PhoneNumber>();
+            CreateMap<PhoneNumber, PhoneNumberDto>();
         }
     }
 }
