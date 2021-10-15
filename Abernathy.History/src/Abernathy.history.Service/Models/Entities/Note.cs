@@ -11,7 +11,7 @@ namespace Abernathy.history.Service.Models.Entities
         public int PatientId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime UpdatedTime { get; set; }
+        public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedTime { get; set; } = DateTime.UtcNow;
     }
 }

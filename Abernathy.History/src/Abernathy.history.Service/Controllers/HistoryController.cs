@@ -14,14 +14,17 @@ namespace Abernathy.history.Service.Controllers
     [ApiController]
     public class HistoryController : ControllerBase
     {
-        private IHistoryService _historyService;
+        private readonly IHistoryService _historyService;
+        private readonly IHttpExternalApiService _externalApiService;
 
-        public HistoryController(IHistoryService historyService)
+        public HistoryController(IHistoryService historyService,
+                                 IHttpExternalApiService externalApiService)
         {
             _historyService = historyService;
+            _externalApiService = externalApiService;
         }
 
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,16 +50,36 @@ namespace Abernathy.history.Service.Controllers
             return item;
         }
 
+        [HttpGet("patient/{patientId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotesByPatientId(int patientId)
+        {
+            var result = await _historyService.GetNotesByPatientIdAsync(patientId);
+
+            var enumerable = result as Note[] ?? result.ToArray();
+
+            if (!enumerable.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(enumerable);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Note>> PostAsync(NoteDTO model)
+        public async Task<ActionResult<Note>> Add(NoteDTO model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException();
             }
+
+            await _historyService.CreateNote(model);
             
             return CreatedAtAction(nameof(GetByIdAsync), new { model.Id }, model);
         }
@@ -67,12 +90,19 @@ namespace Abernathy.history.Service.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutAsync(int Id, NoteDTO updatedModel)
         {
+            if (!await _externalApiService.PatientExists(updatedModel.PatientId))
+            {
+                return NotFound("Patient not found");
+            }
+
             var existingItem = await _historyService.GetNoteById(Id);
 
             if (existingItem == null)
             {
                 return NotFound();
-            }         
+            }
+            
+            await _historyService.UpdateNote(updatedModel);
             
             return NoContent();
         }
@@ -93,7 +123,9 @@ namespace Abernathy.history.Service.Controllers
             {
                 return NotFound();
             }
-            
+
+            _historyService.DeleteNote(Id);
+
             return NoContent();
         }
     }

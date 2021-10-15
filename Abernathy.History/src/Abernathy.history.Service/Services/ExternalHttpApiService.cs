@@ -1,9 +1,5 @@
 ﻿using Abernathy.history.Service.Services.Interfaces;
-using Polly;
-using Polly.Extensions.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,7 +12,7 @@ namespace Abernathy.history.Service.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<bool> GetPatientById(int Id)
+        public async Task<bool> PatientExists(int Id)
         {
             var isPatientExists = false;
 
@@ -28,8 +24,7 @@ namespace Abernathy.history.Service.Services
             }
             catch (Exception)
             {
-
-                throw;
+                throw new Exception();
             }           
 
             return isPatientExists;

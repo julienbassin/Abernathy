@@ -11,5 +11,7 @@ namespace Abernathy.history.Service.Repository.Interfaces
         Task<IEnumerable<Note>> GetAsync(int Id);
         Task RemoveAsync(int Id);
         Task UpdateAsync(Note entity);
+        Task<Note> GetById(int Id);
+        Task<IEnumerable<Note>> GetPatientById(int patientId);
     }
 }

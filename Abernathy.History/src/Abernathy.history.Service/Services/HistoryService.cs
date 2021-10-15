@@ -33,14 +33,9 @@ namespace Abernathy.history.Service.Services
                 throw new ArgumentOutOfRangeException(); 
             }
 
-            var result =  await _historyRepository.GetAsync(Id);
+            var result =  await _historyRepository.GetById(Id);
 
-            if (result == null)
-            {
-                throw new ArgumentException();
-            }
-
-            return result.FirstOrDefault();
+            return result;
         }
 
         public async Task<Note> CreateNote(NoteDTO model)
@@ -58,26 +53,40 @@ namespace Abernathy.history.Service.Services
             return entity;
         }
 
-        public async Task<IEnumerable<Note>> GetNotesByPatientAsync(int patientId)
+        public async Task<IEnumerable<Note>> GetNotesByPatientIdAsync(int patientId)
         {
-            if (patientId <= 0)
-            {
-                throw new ArgumentException(nameof(patientId));
-            }
-
-            var result = await _historyRepository.GetAsync(patientId);
+            var result = await _historyRepository.GetPatientById(patientId);
 
             return result;
         }
 
-        public Task<Note> UpdateNote(NoteDTO model)
+        public async Task<Note> UpdateNote(NoteDTO model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            var entity = _historyRepository.GetById(model.Id);
+
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            var updatedEntity = _mapper.Map<Note>(model);
+            await _historyRepository.UpdateAsync(updatedEntity);
+            return updatedEntity;
+
         }
 
-        public Task<Note> DeleteNote(int Id)
+        public void DeleteNote(int Id)
         {
-            throw new NotImplementedException();
+            if (Id <= 0)
+            {
+                throw new ArgumentException(nameof(Id));
+            }
+             _historyRepository.RemoveAsync(Id);
         }
     }
 }

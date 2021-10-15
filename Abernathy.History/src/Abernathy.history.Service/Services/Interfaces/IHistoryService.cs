@@ -10,10 +10,10 @@ namespace Abernathy.history.Service.Services.Interfaces
     public interface IHistoryService
     {
         Task<IEnumerable<Note>> GetAllNotes();
-        Task<IEnumerable<Note>> GetNotesByPatientAsync(int patientId);
         Task<Note> GetNoteById(int Id);
+        Task<IEnumerable<Note>> GetNotesByPatientIdAsync(int patientId);
         Task<Note> CreateNote(NoteDTO model);
         Task<Note> UpdateNote(NoteDTO model);
-        Task<Note> DeleteNote(int Id);
+        void DeleteNote(int Id);
     }
 }

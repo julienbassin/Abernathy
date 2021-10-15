@@ -58,5 +58,31 @@ namespace Abernathy.history.Service.Repository
             FilterDefinition<Note> filter = filterBuilder.Eq(entity => entity.Id, Id);
             await dbCollection.DeleteOneAsync(filter);
         }
+
+        public async Task<Note> GetById(int Id)
+        {
+            if (Id <= 0)
+            {
+                throw new ArgumentException(nameof(Id));
+            }
+
+            FilterDefinition<Note> filter = filterBuilder.Eq(entity => entity.Id, Id);
+            var result = await dbCollection.Find(filter).SingleAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Note>> GetPatientById(int patientId)
+        {
+            if (patientId <= 0)
+            {
+                throw new ArgumentException(nameof(patientId));
+            }
+
+            FilterDefinition<Note> filter = filterBuilder.Eq(entity => entity.PatientId, patientId);
+            var result = await dbCollection.Find(filter).ToListAsync();
+
+            return result;
+        }
     }
 }

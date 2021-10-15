@@ -7,6 +7,6 @@ namespace Abernathy.history.Service.Services.Interfaces
 {
     public interface IHttpExternalApiService
     {
-        Task<bool> GetPatientById(int Id);
+        Task<bool> PatientExists(int Id);
     }
 }
