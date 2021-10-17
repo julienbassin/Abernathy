@@ -45,20 +45,20 @@ namespace Abernathy.Assessement.Service.Services
                 throw new ArgumentNullException(nameof(patient));
             }
            
-            var currentPatient = _demographicsService.GetPatientById(patient.Id);
+            //var currentPatient = _demographicsService.GetPatientById(patient.Id);
 
             RiskLevel riskLevel;
 
-            if (currentPatient.Result.Age < 30)
+            if (patient.Age < 30)
             {
-                riskLevel = PatientUnder30(currentPatient.Result.GenderId, triggerCount);
+                riskLevel = PatientUnder30(patient.GenderId, triggerCount);
             }
             else
             {
-                riskLevel = PatientOver30(currentPatient.Result.GenderId, triggerCount);
+                riskLevel = PatientOver30(patient.GenderId, triggerCount);
             }
 
-            var assessmentResult = new AssessmentResult(currentPatient.Result.Id, riskLevel);
+            var assessmentResult = new AssessmentResult(patient.Id, riskLevel);
             return assessmentResult;
         }
 

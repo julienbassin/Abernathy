@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net.Http.Json;
+using System.IO;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Abernathy.Assessement.Service.Services
 {
@@ -20,27 +24,31 @@ namespace Abernathy.Assessement.Service.Services
 
         public async Task<PatientModel> GetPatientById(int Id)
         {
-            PatientModel currentPatient = null;
-
             try
             {
-                var response = await _httpClient.GetAsync($"/api/Patient/{Id}");
-                if (response.IsSuccessStatusCode)
+                var httpResponse = _httpClient.GetAsync($"/api/patient/{Id}");
+                var response = httpResponse.Result;
+                var jsonString = response.Content.ReadAsStringAsync().Result;
+                dynamic x = JsonConvert.DeserializeObject(jsonString);
+
+                PatientModel currentPatient = new PatientModel
                 {
-                    var stream = await response.Content.ReadAsStreamAsync();
-                    currentPatient =  JsonParseContent.DeserializeJsonFromStream<PatientModel>(stream);
-                }
-                else
-                {
-                    currentPatient = new PatientModel();
-                }
+                    Id = (int)x.result.id,
+                    FirstName = (string)x.result.firstName,
+                    LastName = (string)x.result.lastName,
+                    Age = (int)x.result.age,
+                    DateOfBirth = (DateTime)x.result.dateOfBirth,
+                    GenderId = (int)x.result.genderId
+                };
+
+                return currentPatient;
+
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+                return null;
             }
-
-            return currentPatient;
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Abernathy.Demographics.Service.Migrations
 {
     [DbContext(typeof(DemographicsContext))]
-    [Migration("20210814132451_Initial")]
+    [Migration("20211017085205_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,110 +123,92 @@ namespace Abernathy.Demographics.Service.Migrations
                         new
                         {
                             Id = 1,
-                            Age = 61,
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "James",
+                            Age = 53,
+                            DateOfBirth = new DateTime(1968, 6, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Lucas",
                             GenderId = 1,
-                            LastName = "Smith"
+                            LastName = "Ferguson"
                         },
                         new
                         {
                             Id = 2,
-                            Age = 61,
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Jiyeon",
+                            Age = 69,
+                            DateOfBirth = new DateTime(1952, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Pippa",
                             GenderId = 2,
-                            LastName = "Lee"
+                            LastName = "Rees"
                         },
                         new
                         {
                             Id = 3,
-                            Age = 11,
-                            DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Masaaki",
+                            Age = 69,
+                            DateOfBirth = new DateTime(1952, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Edward",
                             GenderId = 1,
-                            LastName = "Abe"
+                            LastName = "Arnold"
                         },
                         new
                         {
                             Id = 4,
-                            Age = 11,
-                            DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Anna",
-                            GenderId = 2,
-                            LastName = "Svensson"
+                            Age = 75,
+                            DateOfBirth = new DateTime(1946, 11, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Anthony",
+                            GenderId = 1,
+                            LastName = "Sharp"
                         },
                         new
                         {
                             Id = 5,
                             Age = 61,
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Nurma",
-                            GenderId = 1,
-                            LastName = "Haitam"
+                            DateOfBirth = new DateTime(1958, 6, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Wendy",
+                            GenderId = 2,
+                            LastName = "Ince"
                         },
                         new
                         {
                             Id = 6,
-                            Age = 61,
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Lucy",
+                            Age = 72,
+                            DateOfBirth = new DateTime(1949, 12, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Tracey",
                             GenderId = 2,
-                            LastName = "Johnson"
+                            LastName = "Ross"
                         },
                         new
                         {
                             Id = 7,
-                            Age = 11,
-                            DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Brian",
-                            GenderId = 1,
-                            LastName = "Aleesami"
+                            Age = 55,
+                            DateOfBirth = new DateTime(1966, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Claire",
+                            GenderId = 2,
+                            LastName = "Wilson"
                         },
                         new
                         {
                             Id = 8,
-                            Age = 11,
-                            DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Elizabeth",
-                            GenderId = 2,
-                            LastName = "van Lingen"
+                            Age = 75,
+                            DateOfBirth = new DateTime(1945, 6, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Max",
+                            GenderId = 1,
+                            LastName = "Buckland"
                         },
                         new
                         {
                             Id = 9,
-                            Age = 61,
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Okparaebo",
+                            Age = 57,
+                            DateOfBirth = new DateTime(1964, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Clark",
                             GenderId = 2,
-                            LastName = "Vivienne"
+                            LastName = "Natalie"
                         },
                         new
                         {
                             Id = 10,
                             Age = 61,
-                            DateOfBirth = new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "King",
+                            DateOfBirth = new DateTime(1959, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Bailey",
                             GenderId = 1,
-                            LastName = "Andrew"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Age = 11,
-                            DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Locke",
-                            GenderId = 1,
-                            LastName = "Brian"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Age = 11,
-                            DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Wang",
-                            GenderId = 2,
-                            LastName = "Su Lin"
+                            LastName = "Piers"
                         });
                 });
 

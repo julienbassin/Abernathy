@@ -68,7 +68,7 @@ namespace Abernathy.history.Service.Controllers
             return Ok(enumerable);
         }
 
-        [HttpPost]
+        [HttpPost("Patient")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -88,7 +88,7 @@ namespace Abernathy.history.Service.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutAsync(int Id, NoteDTO updatedModel)
+        public async Task<IActionResult> Put(int Id, NoteDTO updatedModel)
         {
             if (!await _externalApiService.PatientExists(updatedModel.PatientId))
             {

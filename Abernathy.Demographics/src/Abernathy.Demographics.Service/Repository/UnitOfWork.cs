@@ -25,6 +25,12 @@ namespace Abernathy.Demographics.Service.Repository
         public IRepository<PhoneNumber> PhoneNumberRepository =>
             _phoneNumberRepository ??= new Repository<PhoneNumber>(_context);
 
+        public void Commit()
+        {
+            _context.SaveChanges();
+            _context.Dispose();
+        }
+
         public async Task CommitAsync()
         {
             await _context.SaveChangesAsync();

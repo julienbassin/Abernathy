@@ -109,10 +109,7 @@ namespace Abernathy.Demographics.Service.Services
 
             if (modelArray.Any())
             {
-                foreach (var currentPhoneNumbers in modelArray)
-                {
-                    await _insertPhoneNumbers(currentPhoneNumbers, entity);
-                }
+                await _insertPhoneNumbers(modelArray, entity);
             }
 
         }
@@ -129,73 +126,93 @@ namespace Abernathy.Demographics.Service.Services
 
             if (modelArray.Any())
             {
-                foreach (var currentModel in modelArray)
-                {
-                    await _insertAddresses(currentModel, entity);
-                }
+                await _insertAddresses(modelArray, entity);
             }
         }
 
-        private async Task _insertPhoneNumbers(PhoneNumberDto currentPhoneNumber, Patient entity)
+        private async Task _insertPhoneNumbers(PhoneNumberDto[] currentPhoneNumbers, Patient entity)
         {
-            var numberToCompare = Regex.Replace(currentPhoneNumber.number, @"[- ().+]", "");
+            //var numberToCompare = Regex.Replace(currentPhoneNumber.number, @"[- ().+]", "");
 
-            var result = await _unitOfWork.PhoneNumberRepository.Find(ph => ph.number.Contains(numberToCompare)).FirstOrDefaultAsync();
-            // current phonenumber does not exist
-            if (result == null)
+            //var result = await _unitOfWork.PhoneNumberRepository.Find(ph => ph.Id == entity.PhoneNumbers.Where(p => p.Id)).FirstOrDefaultAsync();
+            //// current phonenumber does not exist
+            //if (result == null)
+            //{
+            //    var phoneNumber = _mapper.Map<PhoneNumber>(currentPhoneNumber);
+
+            //    //_unitOfWork.PhoneNumberRepository.Add(phoneNumber);
+
+            //    entity.PhoneNumbers.Add(new PhoneNumber
+            //    {
+            //        number = currentPhoneNumber.number,
+            //        PhoneType = currentPhoneNumber.PhoneType
+            //    });
+            //}
+            if (!entity.PhoneNumbers.Any())
             {
-                var phoneNumber = _mapper.Map<PhoneNumber>(currentPhoneNumber);
-
-                _unitOfWork.PhoneNumberRepository.Add(phoneNumber);
-
-                entity.PhoneNumbers.Add(new PhoneNumber
+                foreach (var currentModel in currentPhoneNumbers)
                 {
-                    number = currentPhoneNumber.number,
-                    PhoneType = currentPhoneNumber.PhoneType
-                });
+                    entity.PhoneNumbers.Add(new PhoneNumber
+                    {
+                        number = currentModel.number,
+                        PhoneType = currentModel.PhoneType
+                    });
+
+                    var phoneNumber = _mapper.Map<PhoneNumber>(currentModel);
+                    _unitOfWork.PhoneNumberRepository.Add(phoneNumber);
+                }                
             }
             else
             {
                 entity.PhoneNumbers = new List<PhoneNumber>();
 
-                entity.PhoneNumbers.Add(new PhoneNumber
+                foreach (var currentModel in currentPhoneNumbers)
                 {
-                    number = result.number,
-                    PhoneType = result.PhoneType
-                });
+                    entity.PhoneNumbers.Add(new PhoneNumber
+                    {
+                        number = currentModel.number,
+                        PhoneType = currentModel.PhoneType
+                    });
+                }               
             }         
 
         }
 
-        private async Task _insertAddresses(AddressDTO currentModel, Patient entity)
+        private async Task _insertAddresses(AddressDTO[] currentAddresses, Patient entity)
         {
 
             if (! entity.Addresses.Any())
             {
-                entity.Addresses.Add(new Address
+                foreach (var currentAddress in currentAddresses)
                 {
-                    HouseNumber = currentModel.HouseNumber,
-                    StreetName = currentModel.StreetName,
-                    Town = currentModel.Town,
-                    ZipCode = currentModel.ZipCode,
-                    State = currentModel.State
-                });
+                    entity.Addresses.Add(new Address
+                    {
+                        HouseNumber = currentAddress.HouseNumber,
+                        StreetName = currentAddress.StreetName,
+                        Town = currentAddress.Town,
+                        ZipCode = currentAddress.ZipCode,
+                        State = currentAddress.State
+                    });
 
-                var address = _mapper.Map<Address>(currentModel);
-                _unitOfWork.AddressRepository.Add(address);
+                    var address = _mapper.Map<Address>(currentAddress);
+                    _unitOfWork.AddressRepository.Add(address);
+                }                
             }
             else
             {
                 entity.Addresses = new List<Address>();
 
-                entity.Addresses.Add(new Address
+                foreach (var currentaddress in currentAddresses)
                 {
-                     HouseNumber = currentModel.HouseNumber,
-                     StreetName = currentModel.StreetName,
-                     Town = currentModel.Town,
-                     ZipCode = currentModel.ZipCode,
-                     State = currentModel.State
-                });
+                    entity.Addresses.Add(new Address
+                    {
+                        HouseNumber = currentaddress.HouseNumber,
+                        StreetName = currentaddress.StreetName,
+                        Town = currentaddress.Town,
+                        ZipCode = currentaddress.ZipCode,
+                        State = currentaddress.State
+                    });
+                }                
             }
         }
 
@@ -215,7 +232,7 @@ namespace Abernathy.Demographics.Service.Services
                 // handle phonenumber
                 await _updatePhoneNumbers(model.PhoneNumbers, currentPatient);
                 _unitOfWork.PatientRepository.Update(currentPatient);
-                await _unitOfWork.CommitAsync();
+                _unitOfWork.CommitAsync();
             }
             catch (Exception)
             {
@@ -239,10 +256,7 @@ namespace Abernathy.Demographics.Service.Services
 
             if (modelArray.Any())
             {
-                foreach (var currentModel in modelArray)
-                {
-                    await _insertPhoneNumbers(currentModel, entity);
-                }
+                await _insertPhoneNumbers(modelArray, entity);
             }
         }
 
@@ -258,10 +272,7 @@ namespace Abernathy.Demographics.Service.Services
 
             if (modelArray.Any())
             {
-                foreach (var currentModel in modelArray)
-                {
-                    await _insertAddresses(currentModel, entity);
-                }
+                await _insertAddresses(modelArray, entity);
             }
         }
 

@@ -13,11 +13,14 @@ namespace Abernathy.history.Service.Services
     public class HistoryService : IHistoryService
     {
         private readonly IHistoryRepository _historyRepository;
+        private readonly IHttpExternalApiService _httpExternalApiService;
         private readonly IMapper _mapper;
         public HistoryService(IHistoryRepository historyRepository,
+                                IHttpExternalApiService httpExternalApiService,
                                 IMapper mapper)
         {
             _historyRepository = historyRepository;
+            _httpExternalApiService = httpExternalApiService;
             _mapper = mapper;
         }
 
@@ -48,7 +51,15 @@ namespace Abernathy.history.Service.Services
 
             // check if patient exists
 
-            await _historyRepository.CreateAsync(entity);
+            try
+            {
+                await _httpExternalApiService.PatientExists(model.PatientId);
+                await _historyRepository.CreateAsync(entity);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }          
 
             return entity;
         }
