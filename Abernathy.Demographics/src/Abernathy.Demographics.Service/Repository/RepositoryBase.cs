@@ -84,8 +84,17 @@ namespace Abernathy.Demographics.Service.Repository
         {
             if (entity != null)
             {
-                // entrer en mode modification
-                _dbContext.Set<TEntity>().Update(entity);
+                try
+                {
+                    TEntity exist = _dbContext.Set<TEntity>().Find(entity.Id);
+                    _dbContext.Entry(exist).CurrentValues.SetValues(entity);
+                }
+                catch (DbUpdateException)
+                {
+                    _dbContext.Entry(entity).State = EntityState.Detached;
+                    throw;
+                }
+                
             }
         }
 

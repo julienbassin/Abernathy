@@ -137,18 +137,16 @@ namespace Abernathy.Demographics.Service.Migrations
                 columns: new[] { "Id", "Age", "DateOfBirth", "FirstName", "GenderId", "LastName" },
                 values: new object[,]
                 {
-                    { 1, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "James", 1, "Smith" },
-                    { 3, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Masaaki", 1, "Abe" },
-                    { 5, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nurma", 1, "Haitam" },
-                    { 7, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Brian", 1, "Aleesami" },
-                    { 10, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "King", 1, "Andrew" },
-                    { 11, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Locke", 1, "Brian" },
-                    { 2, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jiyeon", 2, "Lee" },
-                    { 4, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anna", 2, "Svensson" },
-                    { 6, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lucy", 2, "Johnson" },
-                    { 8, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Elizabeth", 2, "van Lingen" },
-                    { 9, 61, new DateTime(1960, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Okparaebo", 2, "Vivienne" },
-                    { 12, 11, new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wang", 2, "Su Lin" }
+                    { 1, 53, new DateTime(1968, 6, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lucas", 1, "Ferguson" },
+                    { 3, 69, new DateTime(1952, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "Edward", 1, "Arnold" },
+                    { 4, 75, new DateTime(1946, 11, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anthony", 1, "Sharp" },
+                    { 8, 75, new DateTime(1945, 6, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Max", 1, "Buckland" },
+                    { 10, 61, new DateTime(1959, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Bailey", 1, "Piers" },
+                    { 2, 69, new DateTime(1952, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pippa", 2, "Rees" },
+                    { 5, 61, new DateTime(1958, 6, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wendy", 2, "Ince" },
+                    { 6, 72, new DateTime(1949, 12, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tracey", 2, "Ross" },
+                    { 7, 55, new DateTime(1966, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Claire", 2, "Wilson" },
+                    { 9, 57, new DateTime(1964, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Clark", 2, "Natalie" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -36,10 +36,10 @@ namespace Abernathy.Assessement.Service
 
             // microservices
 
-            //services.AddHttpClient<IExternalDemographicsService, ExternalDemograhicsService>(client =>
-            //{
-            //    client.BaseAddress = new Uri(Configuration["DemographicsMicroservice:Url"]);
-            //}).AddPolicyHandler(GetRetryPolicy());
+            services.AddHttpClient<IExternalDemographicsService, ExternalDemograhicsService>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration["DemographicsMicroservice:Url"]);
+            }).AddPolicyHandler(GetRetryPolicy());
 
             services.AddHttpClient<IExternalHistoryService, ExternalHistoryService>(client =>
             {

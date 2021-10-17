@@ -8,6 +8,8 @@ namespace Abernathy.Demographics.Service.Repository.Interfaces
         IRepository<Patient> PatientRepository { get; }
         IRepository<Address> AddressRepository { get; }
         IRepository<PhoneNumber> PhoneNumberRepository { get; }
+
+        void Commit();
         Task CommitAsync();
         Task RollBackAsync();
     }

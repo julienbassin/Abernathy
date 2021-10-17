@@ -33,7 +33,7 @@ namespace Abernathy.Demographics.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DemographicsContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
 
 
             // Database Layer

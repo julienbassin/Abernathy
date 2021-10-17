@@ -50,7 +50,7 @@ namespace Abernathy.Demographics.Service.Controllers
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost]
+        [HttpPost()]
         public async Task<IActionResult> Add(PatientDTO patientDTO)
         {
             if (patientDTO == null)
@@ -63,7 +63,6 @@ namespace Abernathy.Demographics.Service.Controllers
             // return an anonyme object with ID
             return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
-
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
